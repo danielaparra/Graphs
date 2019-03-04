@@ -17,6 +17,8 @@ def main():
     graph.add_edge('0', '3')
     print(graph.vertices)
 
+    graph.dft_recursive(0)
+
 
 if __name__ == '__main__':
     # TODO - parse argv

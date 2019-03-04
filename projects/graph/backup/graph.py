@@ -90,3 +90,20 @@ class Graph:
               for neighbor in self.vertices[v]:
                   s.push(neighbor)
 
+    def dft_recursive(self, starting_vertex_id, visited=set()):
+
+        # Check that current vertex has been visited.
+        if starting_vertex_id not in visited:
+            # If not, print vertex and add to visited set.
+            print(starting_vertex_id)
+            visited.add(f'{starting_vertex_id}')
+
+        # Iterate through its neighbors
+        for neighbor in self.vertices[f'{starting_vertex_id}']:
+            # If neighbor is already visited, move to the next neighbor.
+            if neighbor in visited:
+                return
+            # Otherwise call recursive function.
+            else:    
+                self.dft_recursive(neighbor, visited)
+
