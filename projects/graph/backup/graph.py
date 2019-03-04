@@ -107,3 +107,37 @@ class Graph:
             else:    
                 self.dft_recursive(neighbor, visited)
 
+    def bfs(self, start, target):
+        # Create an empty queue
+        q = Queue()
+        # Create an empty set of visited vertices
+        visited = set()
+        # Put the starting vertex in a list in our Queue
+        q.enqueue([start])
+        # While the queue is not empty....
+        while q.size() > 0:
+            # Grab the current path.
+            path = q.dequeue()
+            # Grab the last vertex in the path.
+            curr_vertex = path[-1]
+
+            # If current vertex is the target, return the path.
+            if curr_vertex == target:
+                return path
+            
+            # If current vertex has not been visited, add to visited list.
+            if curr_vertex not in visited:
+                visited.add(curr_vertex)
+
+                # Iterate through all neighbors.
+                for neighbor in self.vertices[f'{curr_vertex}']:
+                    # Create new path and add current neighbor.
+                    new_path = list(path)
+                    new_path.append(neighbor)
+                    # Add that new path to the queue.
+                    q.enqueue(new_path)
+
+            
+            
+
+

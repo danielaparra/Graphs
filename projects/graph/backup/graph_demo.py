@@ -18,6 +18,7 @@ def main():
     print(graph.vertices)
 
     graph.dft_recursive(0)
+    print(graph.bfs('0', '3'))
 
 
 if __name__ == '__main__':
