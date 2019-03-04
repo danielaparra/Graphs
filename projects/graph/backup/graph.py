@@ -33,19 +33,23 @@ class Graph:
     """Represent a graph as a dictionary of vertices mapping labels to edges."""
     def __init__(self):
         self.vertices = {}
+
     def add_vertex(self, vertex_id):
         self.vertices[vertex_id] = set()
+
     def add_directed_edge(self, v1, v2):
         if v1 in self.vertices and v2 in self.vertices:
             self.vertices[v1].add(v2)
         else:
             raise IndexError("That vertex does not exist")
+    
     def add_edge(self, v1, v2):
         if v1 in self.vertices and v2 in self.vertices:
             self.vertices[v1].add(v2)
             self.vertices[v2].add(v1)
         else:
             raise IndexError("That vertex does not exist")
+    
     def bft(self, starting_vertex_id):
         # Create an empty queue
         q = Queue()
@@ -65,6 +69,7 @@ class Graph:
               # Then, put all of it's children into the queue
               for neighbor in self.vertices[v]:
                   q.enqueue(neighbor)
+    
     def dft(self, starting_vertex_id):
         # Create an empty stack
         s = Stack()
