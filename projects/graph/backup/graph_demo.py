@@ -19,6 +19,7 @@ def main():
 
     graph.dft_recursive(0)
     print(graph.bfs('0', '3'))
+    print(graph.dfs('0', '3'))
 
 
 if __name__ == '__main__':
