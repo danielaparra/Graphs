@@ -1,4 +1,4 @@
-
+import random
 
 class User:
     def __init__(self, name):
@@ -44,9 +44,10 @@ class SocialGraph:
         self.lastID = 0
         self.users = {}
         self.friendships = {}
-        # !!!! IMPLEMENT ME
 
-        # Add users
+        # Add x amount users where x = numUsers.
+        for number in range(1, numUsers + 1):
+            self.addUser(number)
 
         # Create friendships
 
