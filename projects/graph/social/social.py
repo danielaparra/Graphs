@@ -1,4 +1,5 @@
-
+import random
+from queue import SimpleQueue
 
 class User:
     def __init__(self, name):
@@ -44,11 +45,22 @@ class SocialGraph:
         self.lastID = 0
         self.users = {}
         self.friendships = {}
-        # !!!! IMPLEMENT ME
 
-        # Add users
+        # Add x amount users where x = numUsers.
+        for number in range(numUsers):
+            self.addUser(f'{number + 1}')
 
         # Create friendships
+        
+        total_no = numUsers * avgFriendships // 2
+        possible = []
+        for userId in self.users:
+            for friendId in range(userId + 1, self.lastID + 1):
+                possible.append((userId, friendId))
+
+        fships = random.sample(possible, total_no)
+        for friendship in fships:
+            self.addFriendship(friendship[0], friendship[1])
 
     def getAllSocialPaths(self, userID):
         """
@@ -59,10 +71,40 @@ class SocialGraph:
 
         The key is the friend's ID and the value is the path.
         """
-        visited = {}  # Note that this is a dictionary, not a set
-        # !!!! IMPLEMENT ME
+        # Create an empty dictionary.
+        visited = {}  
+        
+        # Iterate through users to find all social paths.
+        for social_connection in self.users:
+            self.bfs(userID, social_connection, visited)
+
         return visited
 
+    def bfs(self, start, target, visited):
+        # Create an empty queue.
+        q = SimpleQueue()
+        # Put the starting userID in a list in our queue.
+        q.put([start])
+        # While the queue is not empty....
+        while not q.empty():
+            # Grab the current path.
+            path = q.get()
+            # Grab the last vertex in the path.
+            curr_vertex = path[-1]
+
+            # If current vertex is the target, return the path.
+            if curr_vertex == target:
+                visited[target] = path
+                return
+
+            # Iterate through all neighbors.
+            for social_connection in self.friendships[curr_vertex]:
+                if social_connection != start and social_connection not in path:
+                    # Create new path and add current neighbor.
+                    new_path = list(path)
+                    new_path.append(social_connection)
+                    # Add that new path to the queue.
+                    q.put(new_path)
 
 if __name__ == '__main__':
     sg = SocialGraph()
