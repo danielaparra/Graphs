@@ -4,6 +4,19 @@ from world import World
 
 import random
 
+class Stack():
+    def __init__(self):
+        self.stack = []
+    def push(self, value):
+        self.stack.append(value)
+    def pop(self):
+        if self.size() > 0:
+            return self.stack.pop()
+        else:
+            return None
+    def size(self):
+        return (len(self.stack))
+
 # Load world
 world = World()
 
@@ -18,17 +31,31 @@ roomGraph={0: [(3, 5), {'n': 1, 's': 5, 'e': 3, 'w': 7}], 1: [(3, 6), {'s': 0, '
 world.loadGraph(roomGraph)
 player = Player("Name", world.startingRoom)
 
-
-world.printRooms("small")
+# Print map of room graph.
+# world.printRooms("small")
 
 # FILL THIS IN
 traversalPath = []
 
 # Method to find traversal path
-def findTraversalPath(self):
+def findTraversalPath():
 
-    # Initialize path
-    pass
+    # Initialize path.
+    traversalPath = []
+    # Get initial room id.
+    starting_room = player.currentRoom.id
+    # Get directions available to current room.
+    avail_directions = player.currentRoom.getExits()
+    # Create an empty set of visited rooms.
+    visited = dict()
+
+
+
+
+
+    print(starting_room)
+
+findTraversalPath()
 
 
 
