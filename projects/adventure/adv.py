@@ -1,6 +1,7 @@
 from room import Room
 from player import Player
 from world import World
+from collections import deque
 
 import random
 
@@ -34,6 +35,58 @@ player = Player("Name", world.startingRoom)
 # Print map of room graph.
 # world.printRooms("small")
 
+# Find nearest room with unexplored directions and return cardinal direction path to it.
+def findNearestRoomToExplore(starting_room, visited_graph):
+    # Create an empty queue.
+    q = deque()
+    # Create an empty set of visited rooms.
+    visited = set()
+    # Put the starting room in a list in our queue.
+    q.append([visited])
+    while len(q) > 0:
+        # Grab the current path.
+        path = q.popleft()
+        # Grab the last room in the path.
+        curr_room = path[-1]
+        # If curr room has unexplored directions, return its path.
+        if '?' in visited_graph[curr_room].values():
+            # Take path of room ids and remove starting room id. 
+            clip_path = path[1:]
+            # Initialize directions path and room where you start
+            directions_path = []
+            room_start = starting_room
+
+            # Iterate through room ids from path.
+            for room_id in clip_path:
+                # Get room start's dictionary.
+                room_start_dict = visited_graph[room_start]
+                # Look for room id from path in room start's dictionary values.
+                for card_direct, room in room_start_dict.items():
+                    # If you find that room id, append its cardinal direction to directions path.
+                    if room == room_id:
+                        directions_path.append(card_direct)
+                        # And reset room start to find next direction.
+                        room_start = room_id
+                        break
+
+            print(directions_path)
+            # Return translated path.
+            return directions_path
+        
+        # If curr room has not been visited, add to visited set.
+        if curr_room not in visited:
+            visited.add(curr_room)
+
+            # Iterate through all connected rooms from current room.
+            for cardinal_direction, connected_room in visited_graph[curr_room].items():
+                # Create new path and add connected room.
+                new_path = list(path)
+                new_path.append(connected_room)
+                # Add that new path to the queue.
+                q.append(new_path)
+        
+
+
 # Method to find traversal path
 def findTraversalPath():
 
@@ -60,24 +113,28 @@ def findTraversalPath():
             # Grab directions dictionary.
             dict_directions = visited[current_room]
             # Get a cardinal direction that hasn't been visited with for loop.
-            direction = None
+            direction = ''
             for cardinal_direction, room_id in dict_directions.items():
                 # If cardinal direction hasn't been visited, save it & break out of for loop.
                 if room_id == '?':
                     direction = cardinal_direction
                     break
+
+            player.travel(direction)
+            traversalPath.append(direction)
             
         else:
             # Find the nearest room that has available directions to explore.
-            pass
+            path_to_nearest = findNearestRoomToExplore(current_room, visited)
+            # Add translated path to traversal path
+            traversalPath.extend(path_to_nearest)
 
-        
+            # Follow path to nearest room with unexplored directions.
+            for direction in path_to_nearest:
+                player.travel(direction)
 
-    # Traverse graph until reaching room with no available directions
-
-    # Return to room 
-
-
+        # Set new current room.
+        current_room = player.currentRoom.id
 
 
     return traversalPath
