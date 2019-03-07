@@ -33,7 +33,7 @@ world.loadGraph(roomGraph)
 player = Player("Name", world.startingRoom)
 
 # Print map of room graph.
-world.printRooms("large")
+#world.printRooms("large")
 
 # Find nearest room with unexplored directions and return cardinal direction path to it.
 def findNearestRoomToExplore(starting_room, visited_graph):
@@ -69,7 +69,6 @@ def findNearestRoomToExplore(starting_room, visited_graph):
                         room_start = room_id
                         break
 
-            print(directions_path)
             # Return translated path.
             return directions_path
         
@@ -129,13 +128,21 @@ def findTraversalPath():
         if '?' in visited[player.currentRoom.id].values():
             # Grab directions dictionary.
             dict_directions = visited[player.currentRoom.id]
-            # Get a cardinal direction that hasn't been visited with for loop.
-            direction = ''
-            for cardinal_direction, room_id in dict_directions.items():
-                # If cardinal direction hasn't been visited, save it & break out of for loop.
-                if room_id == '?':
-                    direction = cardinal_direction
-                    break
+
+            # Get a random key from directions dictionary.
+            random_key = random.choice(list(dict_directions.keys()))
+            # While the value at that random key is not '?' fetch another key.
+            while dict_directions[random_key] is not '?':
+                random_key = random.choice(list(dict_directions.keys()))
+
+            direction = random_key
+            # # Get a cardinal direction that hasn't been visited with for loop.
+            # direction = ''
+            # for cardinal_direction, room_id in dict_directions.items():
+            #     # If cardinal direction hasn't been visited, save it & break out of for loop.
+            #     if room_id == '?':
+            #         direction = cardinal_direction
+            #         break
 
             # Update previous room before moving to next room.
             previous_room = player.currentRoom.id
@@ -166,7 +173,7 @@ def findTraversalPath():
     #return traversalPath
 
 traversalPath = findTraversalPath()
-
+print(traversalPath)
 
 # TRAVERSAL TEST
 visited_rooms = set()
