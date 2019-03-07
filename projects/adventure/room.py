@@ -15,6 +15,8 @@ class Room:
         return f"\n-------------------\n\n{self.name}\n\n   {self.description}\n\n{self.getExitsString()}\n"
     def printRoomDescription(self, player):
         print(str(self))
+    def __repr__(self):
+        return self.name
     def getExits(self):
         exits = []
         if self.n_to is not None:
