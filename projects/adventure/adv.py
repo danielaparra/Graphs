@@ -4,18 +4,18 @@ from world import World
 
 import random
 
-class Stack():
-    def __init__(self):
-        self.stack = []
-    def push(self, value):
-        self.stack.append(value)
-    def pop(self):
-        if self.size() > 0:
-            return self.stack.pop()
-        else:
-            return None
-    def size(self):
-        return (len(self.stack))
+# class Stack():
+#     def __init__(self):
+#         self.stack = []
+#     def push(self, value):
+#         self.stack.append(value)
+#     def pop(self):
+#         if self.size() > 0:
+#             return self.stack.pop()
+#         else:
+#             return None
+#     def size(self):
+#         return (len(self.stack))
 
 # Load world
 world = World()
@@ -34,31 +34,55 @@ player = Player("Name", world.startingRoom)
 # Print map of room graph.
 # world.printRooms("small")
 
-# FILL THIS IN
-traversalPath = []
-
 # Method to find traversal path
 def findTraversalPath():
 
     # Initialize path.
     traversalPath = []
-    # Get initial room id.
-    starting_room = player.currentRoom.id
-    # Get directions available to current room.
-    avail_directions = player.currentRoom.getExits()
-    # Create an empty set of visited rooms.
+    # Create an empty graph of visited rooms.
     visited = dict()
+    # Get initial room id.
+    current_room = player.currentRoom.id
+
+    #While places still to move.
+    while current_room is not None:
+        # If current room hasn't been visited yet...
+        if current_room not in visited.keys():
+            # Get all the directions available to current room.
+            list_directions = player.currentRoom.getExits()
+            # Initialize dictionary for room's directions.
+            dict_directions = {x: '?' for x in list_directions}
+            # Add room to visited.
+            visited[current_room] = dict_directions
+
+        # Check if current room has unexplored directions.
+        if '?' in visited[current_room].values():
+            # Grab directions dictionary.
+            dict_directions = visited[current_room]
+            # Get a cardinal direction that hasn't been visited with for loop.
+            direction = None
+            for cardinal_direction, room_id in dict_directions.items():
+                # If cardinal direction hasn't been visited, save it & break out of for loop.
+                if room_id == '?':
+                    direction = cardinal_direction
+                    break
+            
+        else:
+            # Find the nearest room that has available directions to explore.
+            pass
+
+        
+
+    # Traverse graph until reaching room with no available directions
+
+    # Return to room 
 
 
 
 
+    return traversalPath
 
-    print(starting_room)
-
-findTraversalPath()
-
-
-
+traversalPath = findTraversalPath()
 
 
 # TRAVERSAL TEST
