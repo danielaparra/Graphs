@@ -42,7 +42,7 @@ def findNearestRoomToExplore(starting_room, visited_graph):
     # Create an empty set of visited rooms.
     visited = set()
     # Put the starting room in a list in our queue.
-    q.append([visited])
+    q.append([starting_room])
     while len(q) > 0:
         # Grab the current path.
         path = q.popleft()
@@ -78,14 +78,21 @@ def findNearestRoomToExplore(starting_room, visited_graph):
             visited.add(curr_room)
 
             # Iterate through all connected rooms from current room.
-            for cardinal_direction, connected_room in visited_graph[curr_room].items():
-                # Create new path and add connected room.
-                new_path = list(path)
-                new_path.append(connected_room)
-                # Add that new path to the queue.
-                q.append(new_path)
-        
+            for connected_room in visited_graph[curr_room].values():
+                # Check if connected room has been visited
+                if connected_room not in visited:
+                    
+                    # Create new path and add connected room.
+                    new_path = list(path)
+                    new_path.append(connected_room)
+                    # Add that new path to the queue.
+                    q.append(new_path)
 
+    # Returns None if no room with unexplored directions is found at the end of while loop when q is empty.
+
+        
+# To find opposite direction.
+opposites = {'n': 's', 's': 'n', 'e': 'w', 'w': 'e'}
 
 # Method to find traversal path
 def findTraversalPath():
@@ -95,23 +102,33 @@ def findTraversalPath():
     # Create an empty graph of visited rooms.
     visited = dict()
     # Get initial room id.
-    current_room = player.currentRoom.id
+    # current_room = player.currentRoom.id
+    # Initialize previous room and direction.
+    previous_room = None
+    direction_moved = None
 
-    #While places still to move.
-    while current_room is not None:
+    # While map is not completely explored.
+    while len(visited) < len(roomGraph):
         # If current room hasn't been visited yet...
-        if current_room not in visited.keys():
+        if player.currentRoom.id not in visited.keys():
             # Get all the directions available to current room.
             list_directions = player.currentRoom.getExits()
             # Initialize dictionary for room's directions.
             dict_directions = {x: '?' for x in list_directions}
             # Add room to visited.
-            visited[current_room] = dict_directions
+            visited[player.currentRoom.id] = dict_directions
+
+        # Update graph with for current room and previous room keys
+        if previous_room is not None:
+            
+            visited[previous_room][direction_moved] = player.currentRoom.id
+            visited[player.currentRoom.id][opposites[direction_moved]] = previous_room
+
 
         # Check if current room has unexplored directions.
-        if '?' in visited[current_room].values():
+        if '?' in visited[player.currentRoom.id].values():
             # Grab directions dictionary.
-            dict_directions = visited[current_room]
+            dict_directions = visited[player.currentRoom.id]
             # Get a cardinal direction that hasn't been visited with for loop.
             direction = ''
             for cardinal_direction, room_id in dict_directions.items():
@@ -120,24 +137,33 @@ def findTraversalPath():
                     direction = cardinal_direction
                     break
 
+            # Update previous room before moving to next room.
+            previous_room = player.currentRoom.id
+            # Have player travel in that direction.
             player.travel(direction)
+            # Append direction to overall traversal path.
             traversalPath.append(direction)
+            # Update direction moved.
+            direction_moved = direction
             
         else:
             # Find the nearest room that has available directions to explore.
-            path_to_nearest = findNearestRoomToExplore(current_room, visited)
-            # Add translated path to traversal path
+            path_to_nearest = findNearestRoomToExplore(player.currentRoom.id, visited)
+            # Check if path to nearest returns None.
+            if path_to_nearest is None:
+                return traversalPath
+
+            # Otherwise add translated path to traversal path
             traversalPath.extend(path_to_nearest)
 
             # Follow path to nearest room with unexplored directions.
             for direction in path_to_nearest:
                 player.travel(direction)
 
-        # Set new current room.
-        current_room = player.currentRoom.id
+            previous_room = None
+            direction_moved = None
 
-
-    return traversalPath
+    #return traversalPath
 
 traversalPath = findTraversalPath()
 
