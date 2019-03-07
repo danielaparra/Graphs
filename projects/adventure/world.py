@@ -34,7 +34,7 @@ class World:
                 self.rooms[roomID].connectRooms('w', self.rooms[roomGraph[roomID][1]['w']])
         self.startingRoom = self.rooms[0]
 
-    def printRooms(self):
+    def printRooms(self, size_name):
         rotatedRoomGrid = []
         for i in range(0, len(self.roomGrid)):
             rotatedRoomGrid.append([None] * len(self.roomGrid))
@@ -75,5 +75,8 @@ class World:
                     map_str += "     "
             map_str += "#\n"
         print(map_str)
-
+        # writes map of world to txt file
+        file = open(f"visual/{size_name}.txt", "w")
+        file.write(map_str)
+        file.close()
 

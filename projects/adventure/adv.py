@@ -19,11 +19,16 @@ world.loadGraph(roomGraph)
 player = Player("Name", world.startingRoom)
 
 
-world.printRooms()
+world.printRooms("small")
 
 # FILL THIS IN
-traversalPath = ['n', 's']
+traversalPath = []
 
+# Method to find traversal path
+def findTraversalPath(self):
+
+    # Initialize path
+    pass
 
 
 
